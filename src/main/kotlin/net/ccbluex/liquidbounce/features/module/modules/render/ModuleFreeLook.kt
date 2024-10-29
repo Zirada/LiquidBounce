@@ -19,8 +19,9 @@
 
 package net.ccbluex.liquidbounce.features.module.modules.render
 
-import net.ccbluex.liquidbounce.features.module.Category
-import net.ccbluex.liquidbounce.features.module.Module
+import net.ccbluex.liquidbounce.event.events.MouseRotationEvent
+import net.ccbluex.liquidbounce.event.handler
+import net.ccbluex.liquidbounce.features.module.*
 import net.ccbluex.liquidbounce.utils.input.InputBind
 import net.minecraft.client.option.Perspective
 import net.minecraft.client.option.Perspective.*
@@ -53,12 +54,14 @@ object ModuleFreeLook : Module("FreeLook", Category.RENDER, disableOnQuit = true
         mc.options.perspective = previousPerspective?.next() ?: FIRST_PERSON
     }
 
-    fun updateCamera(cursorDeltaX: Float, cursorDeltaY: Float) {
-        cameraYaw += cursorDeltaX * 0.15f
-        cameraPitch += cursorDeltaY * 0.15f
+    val mouseRotationInputHandler = handler<MouseRotationEvent> {
+        cameraYaw += it.cursorDeltaX.toFloat() * 0.15f
+        cameraPitch += it.cursorDeltaY.toFloat() * 0.15f
 
         if (!noPitchLimit) {
             cameraPitch = cameraPitch.coerceIn(-90f..90f)
         }
+
+        it.cancelEvent()
     }
 }
