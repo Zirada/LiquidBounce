@@ -36,6 +36,7 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.killaura.ModuleKi
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocity.ModuleVelocity
 import net.ccbluex.liquidbounce.features.module.modules.exploit.*
 import net.ccbluex.liquidbounce.features.module.modules.exploit.disabler.ModuleDisabler
+import net.ccbluex.liquidbounce.features.module.modules.exploit.dupe.ModuleDupe
 import net.ccbluex.liquidbounce.features.module.modules.exploit.servercrasher.ModuleServerCrasher
 import net.ccbluex.liquidbounce.features.module.modules.`fun`.*
 import net.ccbluex.liquidbounce.features.module.modules.misc.*
@@ -74,7 +75,7 @@ import net.ccbluex.liquidbounce.features.module.modules.world.fucker.ModuleFucke
 import net.ccbluex.liquidbounce.features.module.modules.world.nuker.ModuleNuker
 import net.ccbluex.liquidbounce.features.module.modules.world.scaffold.ModuleScaffold
 import net.ccbluex.liquidbounce.features.module.modules.world.traps.ModuleAutoTrap
-import net.ccbluex.liquidbounce.script.ScriptApi
+import net.ccbluex.liquidbounce.script.ScriptApiRequired
 import net.ccbluex.liquidbounce.utils.client.mc
 import net.ccbluex.liquidbounce.utils.input.InputBind
 import org.lwjgl.glfw.GLFW
@@ -184,6 +185,7 @@ object ModuleManager : Listenable, Iterable<Module> by modules {
             ModuleBungeeSpoofer,
             ModuleVehicleOneHit,
             ModuleServerCrasher,
+            ModuleDupe,
             ModuleClickTp,
             ModuleConsoleSpammer,
             ModuleTranslationFix,
@@ -332,6 +334,7 @@ object ModuleManager : Listenable, Iterable<Module> by modules {
             ModuleNuker,
             ModuleExtinguish,
             ModuleBedDefender,
+            ModuleSurround,
 
             // Client
             ModuleAutoConfig,
@@ -411,14 +414,14 @@ object ModuleManager : Listenable, Iterable<Module> by modules {
      * This is being used by UltralightJS for the implementation of the ClickGUI. DO NOT REMOVE!
      */
     @JvmName("getCategories")
-    @ScriptApi
+    @ScriptApiRequired
     fun getCategories() = Category.entries.map { it.readableName }.toTypedArray()
 
     @JvmName("getModules")
     fun getModules() = modules
 
     @JvmName("getModuleByName")
-    @ScriptApi
+    @ScriptApiRequired
     fun getModuleByName(module: String) = find { it.name.equals(module, true) }
 
     operator fun get(moduleName: String) = modules.find { it.name.equals(moduleName, true) }

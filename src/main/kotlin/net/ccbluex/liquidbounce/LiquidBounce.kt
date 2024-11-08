@@ -42,26 +42,26 @@ import net.ccbluex.liquidbounce.features.misc.FriendManager
 import net.ccbluex.liquidbounce.features.misc.ProxyManager
 import net.ccbluex.liquidbounce.features.module.ModuleManager
 import net.ccbluex.liquidbounce.features.module.modules.client.ipcConfiguration
+import net.ccbluex.liquidbounce.integration.IntegrationHandler
+import net.ccbluex.liquidbounce.integration.browser.BrowserManager
+import net.ccbluex.liquidbounce.integration.interop.ClientInteropServer
+import net.ccbluex.liquidbounce.integration.interop.protocol.rest.v1.game.ActiveServerList
+import net.ccbluex.liquidbounce.integration.theme.ThemeManager
+import net.ccbluex.liquidbounce.integration.theme.component.ComponentOverlay
 import net.ccbluex.liquidbounce.lang.LanguageManager
 import net.ccbluex.liquidbounce.render.Fonts
 import net.ccbluex.liquidbounce.render.ui.ItemImageAtlas
 import net.ccbluex.liquidbounce.script.ScriptManager
+import net.ccbluex.liquidbounce.utils.aiming.PostRotationExecutor
 import net.ccbluex.liquidbounce.utils.aiming.RotationManager
 import net.ccbluex.liquidbounce.utils.block.ChunkScanner
-import net.ccbluex.liquidbounce.utils.block.WorldChangeNotifier
 import net.ccbluex.liquidbounce.utils.client.*
 import net.ccbluex.liquidbounce.utils.combat.CombatManager
 import net.ccbluex.liquidbounce.utils.combat.combatTargetsConfigurable
 import net.ccbluex.liquidbounce.utils.input.InputTracker
 import net.ccbluex.liquidbounce.utils.inventory.InventoryManager
-import net.ccbluex.liquidbounce.utils.mappings.Remapper
+import net.ccbluex.liquidbounce.utils.mappings.EnvironmentRemapper
 import net.ccbluex.liquidbounce.utils.render.WorldToScreen
-import net.ccbluex.liquidbounce.integration.browser.BrowserManager
-import net.ccbluex.liquidbounce.integration.IntegrationHandler
-import net.ccbluex.liquidbounce.integration.interop.ClientInteropServer
-import net.ccbluex.liquidbounce.integration.interop.protocol.rest.v1.game.ActiveServerList
-import net.ccbluex.liquidbounce.integration.theme.ThemeManager
-import net.ccbluex.liquidbounce.integration.theme.component.ComponentOverlay
 import net.minecraft.resource.ReloadableResourceManagerImpl
 import net.minecraft.resource.ResourceManager
 import net.minecraft.resource.ResourceReloader
@@ -120,10 +120,10 @@ object LiquidBounce : Listenable {
             logger.debug("Loading from cloud: '$CLIENT_CLOUD'")
 
             // Load mappings
-            Remapper.load()
+            EnvironmentRemapper
 
             // Load translations
-            LanguageManager.loadLanguages()
+            LanguageManager.loadDefault()
 
             // Initialize client features
             EventManager
@@ -133,7 +133,6 @@ object LiquidBounce : Listenable {
             combatTargetsConfigurable
 
             ChunkScanner
-            WorldChangeNotifier
             InputTracker
 
             // Features
@@ -155,13 +154,14 @@ object LiquidBounce : Listenable {
             ConfigSystem.root(ClientAccountManager)
             BrowserManager
             Fonts
+            PostRotationExecutor
 
             // Register commands and modules
             CommandManager.registerInbuilt()
             ModuleManager.registerInbuilt()
 
             // Load user scripts
-            ScriptManager.loadScripts()
+            ScriptManager.loadAll()
 
             // Load theme and component overlay
             ThemeManager
