@@ -26,7 +26,9 @@ import net.ccbluex.liquidbounce.utils.input.InputBind
 import net.minecraft.client.option.Perspective
 import net.minecraft.client.option.Perspective.*
 
-object ModuleFreeLook : Module("FreeLook", Category.RENDER, disableOnQuit = true, bindAction = InputBind.BindAction.HOLD) {
+object ModuleFreeLook : Module(
+    "FreeLook", Category.RENDER, disableOnQuit = true, bindAction = InputBind.BindAction.HOLD
+) {
 
     private val noPitchLimit by boolean("NoPitchLimit", true)
 
@@ -54,6 +56,7 @@ object ModuleFreeLook : Module("FreeLook", Category.RENDER, disableOnQuit = true
         mc.options.perspective = previousPerspective?.next() ?: FIRST_PERSON
     }
 
+    @Suppress("unused")
     val mouseRotationInputHandler = handler<MouseRotationEvent> {
         cameraYaw += it.cursorDeltaX.toFloat() * 0.15f
         cameraPitch += it.cursorDeltaY.toFloat() * 0.15f
