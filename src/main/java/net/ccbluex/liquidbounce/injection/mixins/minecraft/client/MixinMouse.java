@@ -78,7 +78,7 @@ public class MixinMouse {
      * Hook mouse cursor event
      */
     @Redirect(method = "updateMouse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;changeLookDirection(DD)V"), require = 1, allow = 1)
-    private void modifyMouseRotationInput(Args args) {
+    private void modifyMouseRotationInput(ClientPlayerEntity instance, double cursorDeltaX, double cursorDeltaY) {
         final MouseRotationEvent event = new MouseRotationEvent(cursorDeltaX, cursorDeltaY);
         EventManager.INSTANCE.callEvent(event);
         if (event.isCancelled()) {
