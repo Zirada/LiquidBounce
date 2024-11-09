@@ -28,22 +28,16 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.ModuleNoMissCoold
 import net.ccbluex.liquidbounce.features.module.modules.combat.killaura.ModuleKillAura;
 import net.ccbluex.liquidbounce.features.module.modules.combat.killaura.features.AutoBlock;
 import net.ccbluex.liquidbounce.features.module.modules.exploit.ModuleMultiActions;
-import net.ccbluex.liquidbounce.features.module.modules.render.ModuleXRay;
-import net.ccbluex.liquidbounce.integration.BrowserScreen;
-import net.ccbluex.liquidbounce.integration.VrScreen;
+import net.ccbluex.liquidbounce.features.module.modules.render.*;
+import net.ccbluex.liquidbounce.integration.*;
 import net.ccbluex.liquidbounce.render.engine.RenderingFlags;
 import net.ccbluex.liquidbounce.utils.client.vfp.VfpCompatibility;
 import net.ccbluex.liquidbounce.utils.combat.CombatManager;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.AccessibilityOnboardingScreen;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.TitleScreen;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.network.ClientPlayerInteractionManager;
-import net.minecraft.client.network.ServerInfo;
-import net.minecraft.client.option.GameOptions;
+import net.minecraft.client.gui.screen.*;
+import net.minecraft.client.network.*;
+import net.minecraft.client.option.*;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.session.Session;
 import net.minecraft.client.util.Window;
@@ -51,15 +45,9 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.hit.HitResult;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.callback.*;
 
 import javax.annotation.Nullable;
 
@@ -235,6 +223,15 @@ public abstract class MixinMinecraftClient {
     @Inject(method = "tick", at = @At("HEAD"))
     private void hookTickEvent(CallbackInfo callbackInfo) {
         EventManager.INSTANCE.callEvent(new GameTickEvent());
+    }
+
+    @Redirect(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/GameOptions;setPerspective(Lnet/minecraft/client/option/Perspective;)V"))
+    private void hookPerspectiveChange(GameOptions instance, Perspective perspective) {
+        if (ModuleFreeLook.INSTANCE.getEnabled()) {
+            ModuleFreeLook.INSTANCE.onPerspectiveChange();
+            return;
+        }
+        instance.setPerspective(perspective);
     }
 
     /**
