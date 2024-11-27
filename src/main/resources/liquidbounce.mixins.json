@@ -97,7 +97,6 @@
     "minecraft.text.MixinChatHudLineVisible",
     "minecraft.text.MixinTextColor",
     "minecraft.text.MixinTranslatableTextContent",
-    "mojang.MixinNarrator",
     "sodium.MixinSodiumBlockOcclusionCache",
     "sodium.MixinSodiumLightDataAccessMixin",
     "truffle.MixinHostClassDesc",
