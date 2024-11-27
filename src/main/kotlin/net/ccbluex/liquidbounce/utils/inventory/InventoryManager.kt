@@ -242,10 +242,6 @@ object InventoryManager : EventListener {
 
         if (screen is InventoryScreen || screen is GenericContainerScreen) {
             inventoryOpened()
-
-            if (screen is InventoryScreen) {
-                isInventoryOpenServerSide = true
-            }
         }
     }
 
